@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bright Smile Dental — Demo Website
+
+A production-quality dental clinic website built with Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, and an AI chatbot powered by the Anthropic Claude API.
+
+## Live Demo Features
+
+- **Public website** with Homepage, Services (8 service detail pages), About, Contact, and Booking
+- **AI chatbot (Brighty)** — powered by Claude Haiku, answers questions about hours, pricing, insurance, services, and books appointments
+- **Multi-step booking form** with calendar picker and real-time validation
+- **Admin dashboard** at `/admin` — appointments, inquiries, status management
+- **Bilingual** — chatbot supports English and Spanish
+- **Mobile-first**, responsive, accessible
+
+## Tech Stack
+
+- **Next.js 15** (App Router) with TypeScript
+- **Tailwind CSS v4** + **shadcn/ui**
+- **Framer Motion** for animations
+- **Anthropic Claude API** (`claude-haiku-4-5-20251001`) for the chatbot
+- **Supabase** for appointments and chatbot inquiry storage
+- **React Hook Form + Zod** for form validation
+- **react-day-picker v10** for the booking calendar
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone and install
+
+```bash
+git clone <your-repo-url>
+cd bright-smile-dental
+npm install
+```
+
+### 2. Set environment variables
+
+Copy `.env.example` to `.env.local` and fill in your keys:
+
+```bash
+cp .env.example .env.local
+```
+
+| Variable | Where to get it |
+|---|---|
+| `ANTHROPIC_API_KEY` | [console.anthropic.com](https://console.anthropic.com) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase project → Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Your Supabase project → Settings → API |
+
+### 3. Set up Supabase (optional for full functionality)
+
+Run the following SQL in your Supabase SQL editor:
+
+```sql
+create table appointments (
+  id uuid default gen_random_uuid() primary key,
+  patient_name text not null,
+  email text not null,
+  phone text not null,
+  service text not null,
+  preferred_date date not null,
+  preferred_time time not null,
+  insurance_provider text,
+  is_new_patient boolean default false,
+  notes text,
+  status text default 'pending' check (status in ('pending', 'confirmed', 'completed', 'cancelled')),
+  created_at timestamptz default now()
+);
+
+create table chatbot_inquiries (
+  id uuid default gen_random_uuid() primary key,
+  name text,
+  phone text,
+  email text,
+  inquiry_type text,
+  conversation jsonb,
+  contacted boolean default false,
+  created_at timestamptz default now()
+);
+```
+
+> **Note:** The site works in demo mode without Supabase — bookings return mock confirmation numbers and the admin uses sample data.
+
+### 4. Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Admin portal:** [http://localhost:3000/admin/login](http://localhost:3000/admin/login)  
+Demo credentials: `admin@brightsmiledental.com` / `demo1234`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Deploy to Vercel
 
-## Learn More
+```bash
+vercel deploy
+```
 
-To learn more about Next.js, take a look at the following resources:
+Add all environment variables in the Vercel dashboard under Project → Settings → Environment Variables.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Customizing for Another Dental Client
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All clinic-specific data is in **one file**: `lib/clinic-data.ts`
 
-## Deploy on Vercel
+Update these fields:
+- `clinicData` — name, address, phone, hours, insurance list
+- `services` — 8 service objects (name, slug, description, pricing, FAQs)
+- `dentists` — doctor bios, credentials, images
+- `testimonials` — patient reviews
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Also update:
+- `lib/chatbot-prompt.ts` — replace all clinic info in the system prompt
+- `app/layout.tsx` — update metadata title and description
+- Brand colors in `app/globals.css` (change `--brand-blue`, `--brand-green`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```
+bright-smile-dental/
+├── app/
+│   ├── (public)/           # Public-facing pages
+│   ├── (admin)/            # Admin dashboard
+│   └── api/                # Chat, appointments, inquiries API routes
+├── components/
+│   ├── chatbot/            # ChatWidget, ChatMessage
+│   ├── homepage/           # Hero, Services, Dentists, Testimonials, CTA
+│   ├── shared/             # Navbar, Footer
+│   └── ui/                 # shadcn/ui components
+├── lib/
+│   ├── clinic-data.ts      # ALL clinic data lives here
+│   ├── chatbot-prompt.ts   # AI chatbot system prompt
+│   └── supabase.ts
+└── types/index.ts
+```
