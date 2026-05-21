@@ -75,9 +75,9 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
-          <span className="inline-block text-xs font-bold text-sky-300 uppercase tracking-[0.2em] mb-4 px-4 py-1.5 bg-white/10 rounded-full border border-white/20">
+          <p className="text-xs font-bold text-sky-300 uppercase tracking-[0.2em] mb-4">
             Patient Stories
-          </span>
+          </p>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-white font-normal leading-tight">
             Real Smiles,
             <br />

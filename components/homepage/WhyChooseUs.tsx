@@ -79,9 +79,9 @@ export default function WhyChooseUs() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="inline-block text-xs font-bold text-[#0369A1] uppercase tracking-[0.2em] mb-4 px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100">
+            <p className="text-xs font-bold text-[#0369A1] uppercase tracking-[0.2em] mb-4">
               Why Bright Smile
-            </span>
+            </p>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#0C1A2E] font-normal mb-6 leading-tight">
               Dental Care That<br />
               <em className="not-italic text-[#0369A1]">Feels Different</em>

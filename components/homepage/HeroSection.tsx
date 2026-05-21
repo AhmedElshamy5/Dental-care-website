@@ -57,19 +57,15 @@ export default function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left: Content */}
           <div>
-            {/* Badge */}
-            <motion.div
+            {/* Location line */}
+            <motion.p
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-sky-200/80 text-[#0369A1] text-xs font-semibold px-4 py-2 rounded-full shadow-sm shadow-sky-100 mb-7"
+              className="text-sm font-semibold text-[#0369A1] tracking-wide mb-7 font-body"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
               Now accepting new patients · Austin, TX
-            </motion.div>
+            </motion.p>
 
             {/* Headline — word stagger */}
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-normal leading-[1.05] tracking-tight text-[#0C1A2E] mb-6">

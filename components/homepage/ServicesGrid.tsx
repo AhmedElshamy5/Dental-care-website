@@ -93,9 +93,9 @@ export default function ServicesGrid() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-xs font-bold text-[#0369A1] uppercase tracking-[0.2em] mb-4 px-4 py-1.5 bg-sky-50 rounded-full border border-sky-100">
+          <p className="text-xs font-bold text-[#0369A1] uppercase tracking-[0.2em] mb-4">
             What We Offer
-          </span>
+          </p>
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-[#0C1A2E] font-normal mb-5 leading-tight">
             Care for Every Smile,
             <br />

@@ -49,9 +49,9 @@ export default function CTASection() {
             style={{ background: 'radial-gradient(circle, #B45309 0%, transparent 70%)' }} />
 
           {/* Content */}
-          <span className="inline-block text-xs font-bold text-sky-300 uppercase tracking-[0.2em] mb-6 px-4 py-1.5 bg-white/10 rounded-full border border-white/20">
+          <p className="text-xs font-bold text-sky-300 uppercase tracking-[0.2em] mb-6">
             Ready to Get Started?
-          </span>
+          </p>
 
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-white font-normal mb-6 leading-tight">
             Ready to smile brighter?

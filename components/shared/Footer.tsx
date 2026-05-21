@@ -165,7 +165,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="mt-5 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20">
+            <div className="mt-5 pt-4 border-t border-white/10">
               <p className="text-xs text-rose-400 font-bold mb-1 font-body">24/7 Emergency Line</p>
               <a
                 href={`tel:${clinicData.emergencyLine.replace(/\D/g, '')}`}
