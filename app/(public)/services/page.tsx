@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, Sparkles, Sun, AlignCenter, Anchor, AlertCircle, Heart, Activity } from 'lucide-react'
+import { ArrowUpRight, CheckCircle, Sparkles, Sun, AlignCenter, Anchor, AlertCircle, Heart, Activity } from 'lucide-react'
 import { services } from '@/lib/clinic-data'
 import type { Service } from '@/types'
 
@@ -18,15 +18,15 @@ const iconMap: Record<string, React.ReactNode> = {
   activity: <Activity className="h-6 w-6" />,
 }
 
-const colorMap: Record<string, string> = {
-  tooth: 'bg-sky-50 text-sky-600',
-  sparkles: 'bg-violet-50 text-violet-600',
-  sun: 'bg-amber-50 text-amber-600',
-  aligncenter: 'bg-lime-50 text-lime-600',
-  anchor: 'bg-blue-50 text-blue-600',
-  alertcircle: 'bg-red-50 text-red-600',
-  heart: 'bg-pink-50 text-pink-600',
-  activity: 'bg-orange-50 text-orange-600',
+const gradientMap: Record<string, string> = {
+  tooth: 'from-[#0369A1] to-[#38BDF8]',
+  sparkles: 'from-violet-600 to-purple-400',
+  sun: 'from-amber-500 to-yellow-400',
+  aligncenter: 'from-emerald-600 to-teal-400',
+  anchor: 'from-blue-700 to-blue-400',
+  alertcircle: 'from-rose-600 to-red-400',
+  heart: 'from-pink-600 to-rose-400',
+  activity: 'from-orange-600 to-amber-400',
 }
 
 const categories = [
@@ -45,23 +45,23 @@ function ServiceCard({ service, i }: { service: Service; i: number }) {
     >
       <Link
         href={`/services/${service.slug}`}
-        className="group block h-full bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 p-6"
+        className="group block h-full bg-white rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all duration-300 p-6"
       >
-        <div className={`w-12 h-12 rounded-xl ${colorMap[service.icon]} flex items-center justify-center mb-4`}>
+        <div
+          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientMap[service.icon]} flex items-center justify-center mb-5 text-white shadow-md group-hover:scale-110 transition-transform duration-300`}
+        >
           {iconMap[service.icon]}
         </div>
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg font-semibold text-gray-900 group-hover:text-sky-700 transition-colors">
-            {service.name}
-          </h3>
-        </div>
-        <p className="text-2xl font-normal text-sky-600 mb-3" style={{ fontFamily: 'Fraunces, Georgia, serif' }}>
+        <h3 className="text-lg font-bold text-[#0C1A2E] group-hover:text-[#0369A1] transition-colors mb-1 font-body">
+          {service.name}
+        </h3>
+        <p className="font-display text-2xl font-normal text-[#0369A1] mb-3">
           {service.startingPrice}
-          <span className="text-sm font-normal text-gray-400 ml-1">starting</span>
+          <span className="text-sm font-body font-normal text-slate-400 ml-1">starting</span>
         </p>
-        <p className="text-sm text-gray-500 leading-relaxed mb-5">{service.shortDescription}</p>
-        <div className="inline-flex items-center gap-1.5 text-sm font-semibold text-sky-600 bg-sky-50 hover:bg-sky-100 px-4 py-2 rounded-full transition-colors">
-          Book This Service <ArrowRight className="h-3.5 w-3.5" />
+        <p className="text-sm text-slate-500 leading-relaxed mb-5 font-body">{service.shortDescription}</p>
+        <div className="flex items-center gap-1.5 text-sm font-bold text-[#0369A1] group-hover:gap-2.5 transition-all duration-200">
+          Book This Service <ArrowUpRight className="h-3.5 w-3.5" />
         </div>
       </Link>
     </motion.div>
@@ -75,19 +75,16 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-28 pb-16 bg-gradient-to-b from-sky-50 to-white">
+      <section className="pt-28 pb-16" style={{ background: 'linear-gradient(160deg, #F0F9FF 0%, #FAFBFC 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <p className="text-sm font-semibold text-sky-600 uppercase tracking-widest mb-3">Services</p>
-            <h1
-              className="text-4xl sm:text-5xl text-gray-900 font-normal mb-5"
-              style={{ fontFamily: 'Fraunces, Georgia, serif' }}
-            >
+            <p className="text-xs font-bold text-[#0369A1] uppercase tracking-[0.2em] mb-4 font-body">Services</p>
+            <h1 className="font-display text-5xl sm:text-6xl text-[#0C1A2E] font-normal mb-5 leading-tight">
               Comprehensive Dental Care
               <br />
-              for Every Stage of Life
+              <em className="not-italic text-[#0369A1]">for Every Stage of Life</em>
             </h1>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-500 max-w-2xl mx-auto font-body leading-relaxed">
               Eight core services — from your first check-up to a complete smile transformation. All under one welcoming roof in Austin, TX.
             </p>
           </motion.div>
@@ -97,16 +94,16 @@ export default function ServicesPage() {
       {/* Filter + Grid */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter tabs */}
-          <div className="flex flex-wrap gap-2 justify-center mb-10">
+          {/* Filter tabs — underline style, no pills */}
+          <div className="flex flex-wrap gap-1 justify-center mb-10 border-b border-slate-100">
             {categories.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActive(cat.id)}
-                className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-5 py-2.5 text-sm font-semibold transition-all border-b-2 -mb-px font-body ${
                   active === cat.id
-                    ? 'bg-sky-500 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'border-[#0369A1] text-[#0369A1]'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
                 }`}
               >
                 {cat.label}
@@ -123,19 +120,16 @@ export default function ServicesPage() {
       </section>
 
       {/* Insurance strip */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm font-semibold text-gray-500 uppercase tracking-widest mb-5">We Accept</p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {['Delta Dental', 'Aetna', 'Cigna', 'MetLife', 'Humana', 'Guardian', 'United Healthcare', 'Blue Cross Blue Shield'].map(ins => (
-              <span key={ins} className="px-4 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-600 font-medium shadow-sm">
-                {ins}
-              </span>
-            ))}
-          </div>
-          <p className="text-sm text-gray-500 mt-4">
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-5 font-body">We Accept</p>
+          <p className="text-slate-600 font-body text-base leading-relaxed">
+            Delta Dental · Aetna · Cigna · MetLife · Humana · Guardian · United Healthcare · Blue Cross Blue Shield
+          </p>
+          <p className="text-sm text-slate-400 mt-4 font-body">
             Not sure about your coverage?{' '}
-            <Link href="/contact" className="text-sky-600 hover:underline font-medium">Contact us</Link> and we&apos;ll verify your benefits before your visit.
+            <Link href="/contact" className="text-[#0369A1] hover:underline font-semibold">Contact us</Link>{' '}
+            and we&apos;ll verify your benefits before your visit.
           </p>
         </div>
       </section>
