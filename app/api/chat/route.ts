@@ -1,17 +1,38 @@
 import { NextRequest } from 'next/server'
 import { chatbotSystemPrompt } from '@/lib/chatbot-prompt'
 import { supabase } from '@/lib/supabase'
+import { rateLimit } from '@/lib/rate-limit'
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 // Claude 3.5 Haiku via OpenRouter (fastest/cheapest Claude model available)
 const MODEL = 'anthropic/claude-3-5-haiku'
 
+const MAX_MESSAGES = 20
+const MAX_CONTENT_LEN = 2000
+const ALLOWED_ROLES = new Set(['user', 'assistant'])
+
 export async function POST(req: NextRequest) {
+  const limit = rateLimit(req, 'chat', { limit: 20, windowMs: 60 * 1000 })
+  if (!limit.ok) {
+    return new Response(
+      JSON.stringify({ error: 'Rate limit exceeded' }),
+      { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(limit.retryAfter) } },
+    )
+  }
+
   try {
     const { messages, language } = await req.json()
 
-    if (!messages || !Array.isArray(messages)) {
+    if (!messages || !Array.isArray(messages) || messages.length === 0 || messages.length > MAX_MESSAGES) {
       return new Response('Invalid request', { status: 400 })
+    }
+    for (const m of messages) {
+      if (!m || typeof m !== 'object'
+        || typeof m.role !== 'string' || !ALLOWED_ROLES.has(m.role)
+        || typeof m.content !== 'string'
+        || m.content.length === 0 || m.content.length > MAX_CONTENT_LEN) {
+        return new Response('Invalid message', { status: 400 })
+      }
     }
 
     const systemPrompt =

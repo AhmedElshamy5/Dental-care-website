@@ -9,7 +9,6 @@ import { Lock, Mail, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { supabase } from '@/lib/supabase'
 
 const schema = z.object({
   email: z.string().email('Valid email required'),
@@ -31,22 +30,21 @@ export default function AdminLoginPage() {
   const onSubmit = async (data: FormData) => {
     setError('')
     try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email, password: data.password }),
       })
-
-      if (authError) {
-        // Demo mode fallback
-        if (data.email === 'admin@brightsmiledental.com' && data.password === 'demo1234') {
-          router.push('/admin')
-          return
-        }
-        setError('Invalid credentials. Use admin@brightsmiledental.com / demo1234 for demo.')
+      if (res.ok) {
+        router.replace('/admin')
+        router.refresh()
         return
       }
-
-      router.push('/admin')
+      if (res.status === 429) {
+        setError('Too many attempts. Please try again later.')
+      } else {
+        setError('Invalid credentials.')
+      }
     } catch {
       setError('Login failed. Please try again.')
     }
@@ -126,13 +124,6 @@ export default function AdminLoginPage() {
               )}
             </Button>
           </form>
-
-          <div className="mt-5 p-3 bg-gray-50 rounded-xl">
-            <p className="text-xs text-gray-500 text-center">
-              Demo credentials:<br />
-              <span className="font-mono font-medium">admin@brightsmiledental.com</span> / <span className="font-mono font-medium">demo1234</span>
-            </p>
-          </div>
         </div>
       </div>
     </div>
